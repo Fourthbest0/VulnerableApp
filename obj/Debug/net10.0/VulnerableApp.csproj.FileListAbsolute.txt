@@ -222,3 +222,5 @@ C:\Users\goten\source\repos\VulnerableApp\bin\Debug\net10.0\ru\Microsoft.CodeAna
 C:\Users\goten\source\repos\VulnerableApp\bin\Debug\net10.0\tr\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 C:\Users\goten\source\repos\VulnerableApp\bin\Debug\net10.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 C:\Users\goten\source\repos\VulnerableApp\bin\Debug\net10.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
+C:\Users\goten\source\repos\VulnerableApp\obj\Debug\net10.0\VulnerableApp.sourcelink.json
+C:\Users\goten\source\repos\VulnerableApp\bin\Debug\net10.0\BCrypt-Net-Next.dll
