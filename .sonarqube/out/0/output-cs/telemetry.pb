@@ -1,0 +1,1 @@
+KR>C:\Users\goten\source\repos\VulnerableApp\VulnerableApp.csprojòCSharp14
