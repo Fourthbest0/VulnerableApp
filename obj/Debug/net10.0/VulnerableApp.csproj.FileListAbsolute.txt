@@ -224,3 +224,13 @@ C:\Users\goten\source\repos\VulnerableApp\bin\Debug\net10.0\zh-Hans\Microsoft.Co
 C:\Users\goten\source\repos\VulnerableApp\bin\Debug\net10.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 C:\Users\goten\source\repos\VulnerableApp\obj\Debug\net10.0\VulnerableApp.sourcelink.json
 C:\Users\goten\source\repos\VulnerableApp\bin\Debug\net10.0\BCrypt-Net-Next.dll
+C:\Users\goten\source\repos\VulnerableApp\bin\Debug\net10.0\Serilog.dll
+C:\Users\goten\source\repos\VulnerableApp\bin\Debug\net10.0\Serilog.AspNetCore.dll
+C:\Users\goten\source\repos\VulnerableApp\bin\Debug\net10.0\Serilog.Extensions.Hosting.dll
+C:\Users\goten\source\repos\VulnerableApp\bin\Debug\net10.0\Serilog.Extensions.Logging.dll
+C:\Users\goten\source\repos\VulnerableApp\bin\Debug\net10.0\Serilog.Formatting.Compact.dll
+C:\Users\goten\source\repos\VulnerableApp\bin\Debug\net10.0\Serilog.Settings.Configuration.dll
+C:\Users\goten\source\repos\VulnerableApp\bin\Debug\net10.0\Serilog.Sinks.Console.dll
+C:\Users\goten\source\repos\VulnerableApp\bin\Debug\net10.0\Serilog.Sinks.Debug.dll
+C:\Users\goten\source\repos\VulnerableApp\bin\Debug\net10.0\Serilog.Sinks.File.dll
+C:\Users\goten\source\repos\VulnerableApp\bin\Debug\net10.0\Serilog.Sinks.Seq.dll
