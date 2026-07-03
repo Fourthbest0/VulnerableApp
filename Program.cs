@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using VulnerableApp.Data;
+using VulnerableApp.Middleware;
 using Serilog;
 
 var configuration = new ConfigurationBuilder()
@@ -13,6 +14,7 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
     .WriteTo.Seq("http://localhost:5341")
     .Enrich.FromLogContext()
+    .Enrich.WithMachineName()
     .CreateLogger();
 
 try
@@ -20,16 +22,20 @@ try
     Log.Information("Iniciando VulnerableApp...");
 
     var builder = WebApplication.CreateBuilder(args);
+
     builder.Host.UseSerilog();
 
     builder.Services.AddControllersWithViews();
     builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-    builder.Services.AddDistributedMemoryCache(); // requerido por AddSession()
     builder.Services.AddSession();
 
     var app = builder.Build();
+
+    app.UseMiddleware<ExceptionMiddleware>();
+    app.UseMiddleware<CorrelationIdMiddleware>();
+    app.UseMiddleware<RequestLoggingMiddleware>();
 
     if (!app.Environment.IsDevelopment())
     {
