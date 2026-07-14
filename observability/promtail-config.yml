@@ -16,17 +16,28 @@ scrape_configs:
         labels:
           job: vulnerableapp
           app: VulnerableApp
+          environment: dev
           category: general
+          module: general
           __path__: /var/log/vulnerableapp/*.txt
     pipeline_stages:
       - match:
-          selector: '{job="vulnerableapp"} |~ "(?i)(login|autenticacion|logout)"'
+          selector: '{job="vulnerableapp"} |~ "(?i)(auth\\.login|auth\\.dashboard|evento de autenticacion)"'
           stages:
             - static_labels:
                 category: security
+                module: authentication
 
       - match:
-          selector: '{job="vulnerableapp"} |~ "(?i)(api\\.|/api/)"'
+          selector: '{job="vulnerableapp"} |~ "(?i)(comment\\.addcomment|comment\\.index)"'
           stages:
             - static_labels:
                 category: audit
+                module: content
+
+      - match:
+          selector: '{job="vulnerableapp"} |~ "(?i)(api\\.getuser|api\\.getallusers)"'
+          stages:
+            - static_labels:
+                category: security
+                module: api
