@@ -9,6 +9,11 @@ namespace VulnerableApp.Controllers
         private readonly AppDbContext _db;
         private readonly ILogger<AuthController> _logger;
 
+        // FIX (CWE-307): tracking simple de intentos fallidos por usuario+IP
+        private static readonly Dictionary<string, (int Intentos, DateTime Bloqueo)> _intentosFallidos = new();
+        private const int MaxIntentos = 5;
+        private static readonly TimeSpan TiempoBloqueo = TimeSpan.FromMinutes(5);
+
         public AuthController(AppDbContext db, ILogger<AuthController> logger)
         {
             _db = db;
@@ -28,20 +33,39 @@ namespace VulnerableApp.Controllers
         {
             var sw = System.Diagnostics.Stopwatch.StartNew();
             var ip = CurrentIp;
+            var clave = $"{username}:{ip}";
 
-            // IMPORTANTE: 'password' nunca se incluye en ningun log, ni siquiera en el catch.
             _logger.LogInformation("Inicio Auth.Login (POST). Usuario:{User} IP:{IP}", username, ip);
+
+            // FIX: checar bloqueo por intentos previos antes de validar credenciales
+            if (_intentosFallidos.TryGetValue(clave, out var estado) &&
+                estado.Intentos >= MaxIntentos &&
+                DateTime.UtcNow < estado.Bloqueo)
+            {
+                _logger.LogWarning("Auth.Login bloqueado por rate limit. Usuario:{User} IP:{IP}", username, ip);
+                ViewBag.Error = "Demasiados intentos. Intenta de nuevo en unos minutos.";
+                sw.Stop();
+                return View();
+            }
 
             try
             {
                 var user = _db.Users.FirstOrDefault(u => u.Username == username);
                 if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
                 {
-                    _logger.LogWarning("Evento de autenticacion: Login fallido. Usuario:{User} IP:{IP}", username, ip);
+                    // FIX: incrementar contador de intentos fallidos
+                    var intentosActuales = _intentosFallidos.TryGetValue(clave, out var e) ? e.Intentos + 1 : 1;
+                    _intentosFallidos[clave] = (intentosActuales, DateTime.UtcNow.Add(TiempoBloqueo));
+
+                    _logger.LogWarning("Evento de autenticacion: Login fallido. Usuario:{User} IP:{IP} Intentos:{Intentos}",
+                        username, ip, intentosActuales);
                     ViewBag.Error = "Credenciales inválidas";
                     sw.Stop();
                     return View();
                 }
+
+                // FIX: login exitoso limpia el contador de esa clave
+                _intentosFallidos.Remove(clave);
 
                 HttpContext.Session.SetString("User", user.Username);
                 HttpContext.Session.SetInt32("UserId", user.Id);
@@ -106,4 +130,4 @@ namespace VulnerableApp.Controllers
             return RedirectToAction("Index", "Home");
         }
     }
-}
+}   

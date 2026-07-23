@@ -27,6 +27,14 @@ namespace VulnerableApp.Controllers
 
             _logger.LogInformation("Inicio Search.Index. Usuario:{User} IP:{IP} Query:{Query}", user, ip, search);
 
+            // FIX (CWE-306): exigir sesion activa antes de exponer datos de usuarios
+            if (!HttpContext.Session.GetInt32("UserId").HasValue)
+            {
+                _logger.LogWarning("Search.Index acceso no autorizado (sin sesion). Usuario:{User} IP:{IP}", user, ip);
+                sw.Stop();
+                return RedirectToAction("Login", "Auth");
+            }
+
             try
             {
                 if (string.IsNullOrEmpty(search))

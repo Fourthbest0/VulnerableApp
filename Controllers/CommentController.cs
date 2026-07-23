@@ -43,6 +43,7 @@ namespace VulnerableApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken] // FIX (CWE-352): exige token anti-CSRF en el POST
         public IActionResult AddComment(string comment)
         {
             var sw = System.Diagnostics.Stopwatch.StartNew();
@@ -50,8 +51,6 @@ namespace VulnerableApp.Controllers
             var ip = CurrentIp;
             var longitud = comment?.Length ?? 0;
 
-            // No se loguea el contenido completo del comentario para evitar volcar
-            // texto arbitrario de usuario (posible payload) directamente en los logs.
             _logger.LogInformation("Inicio Comment.AddComment. Usuario:{User} IP:{IP} LongitudComentario:{Longitud}",
                 user, ip, longitud);
 

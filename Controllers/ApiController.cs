@@ -80,8 +80,19 @@ namespace VulnerableApp.Controllers
 
             try
             {
-                // Hallazgo de seguridad: este endpoint no valida sesion/rol antes de listar todos los usuarios.
-                var users = _db.Users.ToList();
+                // FIX (CWE-306): exigir sesion activa antes de listar usuarios
+                var currentUserId = HttpContext.Session.GetInt32("UserId");
+                if (!currentUserId.HasValue)
+                {
+                    _logger.LogWarning("Api.GetAllUsers acceso no autorizado (sin sesion). Usuario:{User} IP:{IP}", user, ip);
+                    sw.Stop();
+                    return Unauthorized();
+                }
+
+                // FIX: proyectar a DTO anonimo, nunca exponer PasswordHash
+                var users = _db.Users
+                    .Select(u => new { u.Id, u.Username, u.Email })
+                    .ToList();
 
                 sw.Stop();
                 _logger.LogInformation("Fin Api.GetAllUsers. Usuario:{User} IP:{IP} TotalRegistros:{Total} DuracionMs:{Duracion}",

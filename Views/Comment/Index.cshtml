@@ -3,6 +3,7 @@
 <h2>Comentarios</h2>
 
 <form method="post" action="/Comment/AddComment">
+    @Html.AntiForgeryToken()
     <textarea name="comment" rows="4" cols="50"></textarea>
     <button type="submit">Comentar</button>
 </form>
