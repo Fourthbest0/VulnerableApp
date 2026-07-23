@@ -64,6 +64,7 @@ jobs:
           target: 'http://localhost:8080'
           rules_file_name: '.zap/rules.tsv'
           cmd_options: '-I'
+          artifact_name: 'zap-scan-report'
 
       - name: Upload ZAP report
         uses: actions/upload-artifact@v4
