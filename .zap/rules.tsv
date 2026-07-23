@@ -1,0 +1,5 @@
+# .zap/rules.tsv
+# Formato: ID_REGLA	ACCION	COMENTARIO
+# ACCIONES: IGNORE (ignorar), WARN (solo advertir), FAIL (fallar el build)
+10035	WARN	Strict-Transport-Security Header - solo aplica en HTTPS, CI corre en HTTP
+10096	WARN	Timestamp Disclosure - bajo riesgo, informativo
