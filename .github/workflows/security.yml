@@ -9,6 +9,9 @@ jobs:
   dast-zap:
     name: DAST - OWASP ZAP
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
 
     services:
       sqlserver:
